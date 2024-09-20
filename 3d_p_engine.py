@@ -3,10 +3,16 @@ from OpenGL.GL import *
 import numpy as np
 import ctypes
 import pyrr
+import sys
 from OpenGL.GL.shaders import compileProgram, compileShader
 from PIL import Image
 
-texture = 'texture.png'
+if len(sys.argv) > 3:
+    print("Invalid Arguments\nValid Args are: argv[1] (Path to a texture file), argv[2] (Path to a .obj file)")
+    exit(1)
+
+texture = sys.argv[1]
+model = sys.argv[2]
 tex = Image.open(texture)
 tex = tex.transpose(Image.FLIP_TOP_BOTTOM)
 xSize, ySize = tex.size
@@ -34,7 +40,7 @@ class App:
         self.button_1 = pg.Rect(100, 100, 100, 100)
         #rendering opengl
         self.transform = Transform(position=[0, 0, -2.7], eulers=[0, 0, 0])
-        self.cube_mesh = Mesh('model.obj')
+        self.cube_mesh = Mesh(model)
         self.texture = Material(texture)
         self.generate_holo()
         projection_transform = pyrr.matrix44.create_perspective_projection(
